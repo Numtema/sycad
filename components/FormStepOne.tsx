@@ -2,7 +2,7 @@
 import React from 'react';
 import { DocumentType, FormData } from '../types';
 import { THEME } from '../constants';
-import { Calendar, Info, FileEdit, Hash, MessageSquare, HelpCircle, FileText } from 'lucide-react';
+import { Info, FileText, ChevronDown, AlignLeft, Calendar } from 'lucide-react';
 
 interface FormStepOneProps {
   formData: FormData;
@@ -15,134 +15,111 @@ const FormStepOne: React.FC<FormStepOneProps> = ({ formData, setFormData }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  return (
-    <div className={`${THEME.spacing.sectionGap} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
-      {/* Header Banner using Theme Primary Color */}
-      <div 
-        style={{ backgroundColor: THEME.colors.primary }}
-        className="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl shadow-lg shadow-emerald-100 text-white mb-8"
-      >
-        <div className="flex items-center gap-3">
-          <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
-            <FileText size={20} className="text-white" />
-          </div>
-          <span className="font-bold tracking-wide">Nature & Identification de la Demande</span>
-        </div>
-      </div>
+  const inputClasses = "w-full p-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 focus:bg-white transition-all font-bold text-[13px] text-slate-700 placeholder:text-slate-300 placeholder:font-medium shadow-sm";
+  const labelClasses = "block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1 flex items-center gap-1.5";
 
-      {/* Block 1: Nature de la demande */}
-      <section className="bg-white rounded-3xl p-1 border border-transparent">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <FileEdit size={22} />
-          </div>
-          <div>
-            <h2 className={THEME.typography.h2}>Nature de la demande</h2>
-            <p className={THEME.typography.label}>Étape pivot du dossier</p>
-          </div>
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-400">
+      {/* Nature de la demande */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Nature du document</h2>
         </div>
         
-        <div className="max-w-2xl bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
-          <label className="block text-sm font-bold text-slate-700 mb-3 ml-1">
-            Type de document <span style={{ color: THEME.colors.secondary }}>*</span>
+        <div className="max-w-xl">
+          <label className={labelClasses}>
+            Type d'acte <span className="text-emerald-500">*</span>
           </label>
           <div className="relative group">
             <select 
               name="documentType"
               value={formData.documentType}
               onChange={handleChange}
-              className="w-full p-4 pl-5 bg-white border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold appearance-none cursor-pointer text-slate-700"
+              className={`${inputClasses} appearance-none cursor-pointer pr-12 group-hover:border-emerald-300`}
             >
-              <option value="" disabled>Sélectionner le type d'acte...</option>
-              <option value={DocumentType.ATTRIBUTION}>{DocumentType.ATTRIBUTION.toUpperCase()}</option>
-              <option value={DocumentType.CESSION}>{DocumentType.CESSION.toUpperCase()}</option>
+              <option value="" disabled className="text-slate-400">Choisir un type...</option>
+              <option value={DocumentType.ATTRIBUTION} className="font-bold text-slate-700 py-2">{DocumentType.ATTRIBUTION}</option>
+              <option value={DocumentType.CESSION} className="font-bold text-slate-700 py-2">{DocumentType.CESSION}</option>
             </select>
-            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-emerald-500 transition-colors">
+              <ChevronDown size={18} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Block 2: Identification */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <Calendar size={22} />
-          </div>
-          <div>
-            <h2 className={THEME.typography.h2}>Identification</h2>
-            <p className={THEME.typography.label}>Chronologie & Objet</p>
-          </div>
+      {/* Identification & Date */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Détails de la demande</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
-              Objet de la demande <span style={{ color: THEME.colors.secondary }}>*</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="md:col-span-2">
+            <label className={labelClasses}>
+              <AlignLeft size={10} className="text-emerald-600" />
+              Objet de la demande <span className="text-emerald-500">*</span>
             </label>
             <input 
               type="text"
               name="subject"
               value={formData.subject}
               onChange={handleChange}
-              className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold text-slate-700"
+              placeholder="Saisir l'objet de la demande..."
+              className={inputClasses}
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
-              Date de la demande <span style={{ color: THEME.colors.secondary }}>*</span>
+          <div>
+            <label className={labelClasses}>
+              <Calendar size={10} className="text-emerald-600" />
+              Date de la demande <span className="text-emerald-500">*</span>
             </label>
             <input 
               type="date"
               name="requestDate"
               value={formData.requestDate}
               onChange={handleChange}
-              className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold text-slate-700"
+              className={`${inputClasses} cursor-pointer`}
             />
           </div>
         </div>
       </section>
 
-      {/* Block 3: Référence */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <Hash size={22} />
-          </div>
-          <div>
-            <h2 className={THEME.typography.h2}>Référence administrative</h2>
-            <p className={THEME.typography.label}>Identifiant unique</p>
-          </div>
+      {/* Référence Administrative */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Référence administrative</h2>
         </div>
 
-        <div className="max-w-2xl space-y-4">
-          <input 
-            type="text"
-            name="reference"
-            value={formData.reference}
-            onChange={handleChange}
-            placeholder="Laisser vide pour une génération système..."
-            className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold text-slate-700"
-          />
-          <div className="p-4 bg-blue-50/40 border border-blue-100 rounded-2xl flex items-center gap-3">
-             <Info size={16} className="text-blue-500" />
-             <p className="text-[11px] text-blue-700 font-bold uppercase tracking-tight">Génération auto : SR-DATE-00X si vide</p>
+        <div className="max-w-xl space-y-3">
+          <div>
+            <label className={labelClasses}>Référence manuelle (Optionnel)</label>
+            <input 
+              type="text"
+              name="reference"
+              value={formData.reference}
+              onChange={handleChange}
+              placeholder="Saisie manuelle optionnelle..."
+              className={inputClasses}
+            />
+          </div>
+          
+          <div className="px-4 py-3 bg-emerald-50/40 border border-emerald-100 rounded-xl flex items-center gap-3 shadow-sm shadow-emerald-900/5">
+             <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                <Info size={14} />
+             </div>
+             <p className="text-[11px] text-emerald-800 font-bold tracking-tight">
+               Le système générera <span className="text-emerald-600 font-black px-1.5 py-0.5 bg-white rounded border border-emerald-100 italic">SR-DATE-00X</span> si ce champ est vide.
+             </p>
           </div>
         </div>
       </section>
 
-      {/* Block 4: Observation */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <MessageSquare size={22} />
-          </div>
-          <div>
-            <h2 className={THEME.typography.h2}>Observation</h2>
-            <p className={THEME.typography.label}>Commentaires facultatifs</p>
-          </div>
+      {/* Observation */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Observations complémentaires</h2>
         </div>
 
         <textarea 
@@ -151,9 +128,12 @@ const FormStepOne: React.FC<FormStepOneProps> = ({ formData, setFormData }) => {
           onChange={handleChange}
           rows={4}
           maxLength={500}
-          placeholder="Informations complémentaires..."
-          className="w-full p-6 bg-slate-50 border-2 border-slate-100 rounded-[2rem] focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold text-slate-700"
+          placeholder="Notes complémentaires utiles au traitement administratif du dossier..."
+          className={`${inputClasses} resize-none no-scrollbar py-4 px-5`}
         ></textarea>
+        <div className="flex justify-end pr-2">
+          <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">{formData.observation.length} / 500 CARACTÈRES</span>
+        </div>
       </section>
     </div>
   );

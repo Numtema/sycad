@@ -1,201 +1,161 @@
 
 import React from 'react';
 import { FormData } from '../types';
-import { MapPin, Box, Layers, Maximize, Target, Info, Map } from 'lucide-react';
+import { MapPin, Box, Layers, Maximize, Target, Map, ChevronDown, Ruler, LayoutGrid } from 'lucide-react';
 
 interface FormStepTwoProps {
   formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
-const FormStepTwo: React.FC<FormStepTwoProps> = ({ formData, setFormData }) => {
+const FormStepTwo: React.FC<FormStepTwoProps & { setFormData: React.Dispatch<React.SetStateAction<FormData>> }> = ({ formData, setFormData }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const communes = [
-    "PIELA",
-    "MOGTEDO",
-    "BAMA",
-    "ORODARA",
-    "PENI",
-    "DOUMBALA",
-    "BOBO-DIOULASSO",
-    "OUAGADOUGOU"
-  ];
+  const communes = ["PIELA", "MOGTEDO", "BAMA", "ORODARA", "PENI", "DOUMBALA", "BOBO-DIOULASSO", "OUAGADOUGOU"];
+  const usages = ["Habitation", "Commerce", "Industrie", "Espace Vert", "Equipement Public", "Culte"];
 
-  const usages = [
-    "Habitation",
-    "Commerce",
-    "Industrie",
-    "Espace Vert",
-    "Equipement Public",
-    "Culte"
-  ];
+  const inputClasses = "w-full p-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 focus:bg-white transition-all font-bold text-[13px] text-slate-700 placeholder:text-slate-300 placeholder:font-medium shadow-sm";
+  const labelClasses = "block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1 flex items-center gap-1.5";
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Header Banner for Step 2 */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-emerald-700 rounded-2xl shadow-lg shadow-emerald-100 text-white mb-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-400">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-5 bg-[#064e3b] rounded-2xl text-white shadow-lg mb-4">
         <div className="flex items-center gap-3">
-          <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
-            <Map size={20} className="text-white" />
+          <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10">
+            <Map size={20} className="text-emerald-400" />
           </div>
-          <span className="font-bold tracking-wide">Identification de la Parcelle Objet de la Demande</span>
+          <span className="font-black text-sm uppercase tracking-wider">Identification Parcelle</span>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-800/40 rounded-xl text-xs font-bold border border-emerald-600/50">
-           Secteur: {formData.section || '--'} | Lot: {formData.lot || '--'}
+        <div className="bg-white/10 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/10 flex items-center gap-3">
+           <span>Lot: <span className="text-emerald-400">{formData.lot || '--'}</span></span>
+           <span className="opacity-30">|</span>
+           <span>N°: <span className="text-emerald-400">{formData.parcelNumber || '--'}</span></span>
         </div>
       </div>
 
-      {/* Block 1: Localisation Administrative */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <MapPin size={22} />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-slate-800">Localisation Administrative</h2>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-0.5">Commune & Arrondissement</p>
-          </div>
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Localisation administrative</h2>
         </div>
         
-        <div className="max-w-2xl bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
-          <label className="block text-sm font-bold text-slate-700 mb-3 ml-1">
-            Commune <span className="text-emerald-500 font-bold">*</span>
-          </label>
+        <div className="max-w-xl">
+          <label className={labelClasses}>Commune <span className="text-emerald-500">*</span></label>
           <div className="relative group">
             <select 
               name="commune"
               value={formData.commune}
               onChange={handleChange}
-              className="w-full p-4 pl-5 bg-white border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold appearance-none cursor-pointer text-slate-700 group-hover:border-slate-300"
+              className={`${inputClasses} appearance-none cursor-pointer pr-12 group-hover:border-emerald-300`}
             >
-              <option value="" disabled>Rechercher ou sélectionner une commune...</option>
+              <option value="" disabled>Sélectionner la commune...</option>
               {communes.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
-            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-emerald-500 transition-colors">
+              <ChevronDown size={18} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Block 2: Références Foncières */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <Box size={22} />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-slate-800">Références Foncières</h2>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-0.5">Section, Lot & Parcelle</p>
-          </div>
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Références Foncières</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
-              Section / Bloc <span className="text-emerald-500 font-bold">*</span>
-            </label>
-            <div className="relative">
-              <Layers size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
-              <input 
-                type="text"
-                name="section"
-                value={formData.section}
-                onChange={handleChange}
-                placeholder="Ex: AB"
-                className="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold text-slate-700 uppercase"
-              />
-            </div>
+            <label className={labelClasses}>Section <span className="text-emerald-500">*</span></label>
+            <input 
+              type="text"
+              name="section"
+              value={formData.section}
+              onChange={handleChange}
+              placeholder="Ex: AB"
+              className={`${inputClasses} uppercase text-center tracking-widest`}
+            />
           </div>
-
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
-              Lot
-            </label>
+            <label className={labelClasses}>Lot</label>
             <input 
               type="text"
               name="lot"
               value={formData.lot}
               onChange={handleChange}
               placeholder="Ex: 05"
-              className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold text-slate-700"
+              className={`${inputClasses} text-center font-black`}
             />
           </div>
-
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
-              N° Parcelle <span className="text-emerald-500 font-bold">*</span>
-            </label>
+            <label className={labelClasses}>N° Parcelle <span className="text-emerald-500">*</span></label>
             <input 
               type="text"
               name="parcelNumber"
               value={formData.parcelNumber}
               onChange={handleChange}
               placeholder="Ex: 12"
-              className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold text-slate-700"
+              className={`${inputClasses} text-center font-black`}
             />
           </div>
         </div>
       </section>
 
-      {/* Block 3: Caractéristiques Physiques & Usage */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-            <Maximize size={22} />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-slate-800">Caractéristiques & Usage</h2>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-0.5">Superficie & Destination</p>
-          </div>
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+          <h2 className="text-[13px] font-black text-slate-800 uppercase tracking-wider">Superficie & Usage</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
+            <label className={labelClasses}>
+              <Ruler size={10} className="text-emerald-600" />
               Superficie (m²)
             </label>
-            <div className="relative">
+            <div className="relative group">
               <input 
                 type="text"
                 name="surface"
                 value={formData.surface}
                 onChange={handleChange}
                 placeholder="Ex: 300"
-                className="w-full p-4 pl-5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold text-slate-700"
+                className={`${inputClasses} pr-14 group-hover:border-emerald-300`}
               />
-              <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">m²</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-[10px] uppercase group-focus-within:text-emerald-600">m²</span>
             </div>
           </div>
-
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 ml-1">
-              Destination / Usage
+            <label className={labelClasses}>
+              <LayoutGrid size={10} className="text-emerald-600" />
+              Usage principal
             </label>
-            <select 
-              name="usage"
-              value={formData.usage}
-              onChange={handleChange}
-              className="w-full p-4 pl-5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-semibold appearance-none cursor-pointer text-slate-700"
-            >
-              <option value="">Sélectionner l'usage...</option>
-              {usages.map(u => <option key={u} value={u}>{u}</option>)}
-            </select>
+            <div className="relative group">
+              <select 
+                name="usage"
+                value={formData.usage}
+                onChange={handleChange}
+                className={`${inputClasses} appearance-none cursor-pointer pr-12 group-hover:border-emerald-300`}
+              >
+                <option value="">Sélectionner l'usage...</option>
+                {usages.map(u => <option key={u} value={u}>{u}</option>)}
+              </select>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-emerald-500 transition-colors">
+                <ChevronDown size={18} />
+              </div>
+            </div>
           </div>
         </div>
         
-        <div className="mt-8 p-5 bg-emerald-50/40 border border-emerald-100 rounded-[1.5rem] flex items-start gap-4 shadow-sm">
-           <div className="bg-emerald-100 p-2 rounded-xl text-emerald-600 shrink-0">
-              <Target size={18} />
+        <div className="mt-6 p-5 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-start gap-4 shadow-sm">
+           <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600">
+             <Target size={20} />
            </div>
-           <p className="text-xs text-emerald-700 leading-relaxed font-medium">
-             Vérifiez soigneusement la <strong>Section</strong> et le <strong>Numéro de Parcelle</strong>. 
-             Toute erreur à cette étape pourrait invalider l'attestation finale.
-           </p>
+           <div className="space-y-1">
+             <h4 className="text-[11px] font-black text-emerald-900 uppercase tracking-widest">Aide à la saisie</h4>
+             <p className="text-[12px] text-emerald-800/80 leading-relaxed font-medium">
+               Assurez-vous que les coordonnées cadastrales correspondent exactement à celles figurant sur votre titre de propriété ou certificat de bornage original.
+             </p>
+           </div>
         </div>
       </section>
     </div>

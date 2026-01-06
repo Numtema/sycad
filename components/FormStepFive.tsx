@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { FormData, Quittance } from '../types';
-import { Plus, MinusCircle, Info, CreditCard, Receipt, Calendar, Hash, Banknote } from 'lucide-react';
+import { Plus, Trash2, Info, Receipt, Calendar, Hash, Banknote } from 'lucide-react';
 
 interface FormStepFiveProps {
   formData: FormData;
@@ -37,160 +37,112 @@ const FormStepFive: React.FC<FormStepFiveProps> = ({ formData, setFormData }) =>
     }));
   };
 
+  const totalAmount = formData.quittances.reduce((acc, curr) => {
+    const val = parseFloat(curr.amount.replace(/\s/g, '')) || 0;
+    return acc + val;
+  }, 0);
+
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
-      {/* Header Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-5 bg-[#064e3b] rounded-2xl shadow-lg shadow-emerald-200/50 text-white mb-6">
-        <div className="flex items-center gap-4">
-          <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-md">
-            <Receipt size={24} className="text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-tight">Paiements et Quittances</span>
-            <span className="text-[10px] uppercase font-bold text-emerald-100 tracking-widest mt-0.5">Justification des droits et taxes acquittés</span>
-          </div>
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-400 pb-10">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-[#064e3b] rounded-xl text-white shadow-sm mb-2">
+        <div className="flex items-center gap-3">
+          <Receipt size={18} className="opacity-80" />
+          <span className="font-bold text-xs uppercase tracking-widest">Paiements & Quittances</span>
         </div>
-        <div className="bg-emerald-600/30 px-5 py-2 rounded-xl border border-white/10 flex items-center gap-3">
-          <CreditCard size={18} />
-          <span className="text-xs font-black uppercase">
-            {formData.quittances.length} Quittance{formData.quittances.length > 1 ? 's' : ''} Enregistrée{formData.quittances.length > 1 ? 's' : ''}
-          </span>
+        <div className="bg-white/10 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider">
+           Total: {totalAmount.toLocaleString()} FCFA
         </div>
       </div>
 
-      {/* Info Message */}
-      <div className="p-5 bg-blue-50/50 border-2 border-blue-100 rounded-[1.5rem] flex items-center gap-4 shadow-sm">
-        <div className="bg-blue-500 p-2 rounded-xl text-white">
-          <Info size={18} />
-        </div>
-        <p className="text-sm text-blue-800 font-semibold">
-          Veuillez renseigner les informations sur les quittances de paiement des droits et taxes
-        </p>
+      <div className="p-4 bg-emerald-50/40 border border-emerald-100 rounded-xl flex items-center gap-3">
+        <Info size={16} className="text-emerald-600" />
+        <p className="text-[10px] text-emerald-800 font-medium uppercase tracking-tight">Renseignez les justificatifs de paiement des droits et taxes.</p>
       </div>
 
-      {/* Add Button */}
-      <div className="flex justify-center">
+      <div className="flex justify-start">
         <button 
           onClick={addQuittance}
-          className="flex items-center gap-2 px-8 py-3.5 bg-[#064e3b] text-white rounded-2xl text-sm font-black shadow-lg shadow-emerald-200 hover:bg-emerald-900 transition-all hover:scale-105"
+          className="flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-emerald-900 transition-all"
         >
-          <Plus size={20} />
+          <Plus size={14} />
           Ajouter une quittance
         </button>
       </div>
 
-      {/* Quittances List */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         {formData.quittances.map((quittance, index) => (
           <div 
             key={quittance.id}
-            className="bg-white border-2 border-slate-100 rounded-[2.5rem] p-8 md:p-10 relative shadow-xl shadow-slate-100 transition-all hover:border-emerald-200 group"
+            className="bg-white border border-slate-200 rounded-2xl p-6 relative shadow-sm transition-all hover:border-emerald-200"
           >
             {formData.quittances.length > 1 && (
               <button 
                 onClick={() => removeQuittance(quittance.id)}
-                className="absolute top-6 right-6 text-rose-500 hover:scale-110 transition-transform opacity-60 group-hover:opacity-100"
+                className="absolute top-4 right-4 text-slate-300 hover:text-rose-500 transition-colors p-1"
               >
-                <MinusCircle size={28} />
+                <Trash2 size={16} />
               </button>
             )}
 
-            <div className="flex items-center gap-3 mb-8">
-              <span className="bg-emerald-50 text-emerald-600 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100">
-                Quittance N°0{index + 1}
-              </span>
+            <div className="flex items-center gap-2 mb-6">
+              <span className="bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest">Justificatif #{index + 1}</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Reference Field */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block ml-1">
-                  Référence <span className="text-rose-500">(*)</span>
-                </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block ml-1">Référence <span className="text-rose-500">*</span></label>
                 <div className="relative">
-                  <Hash size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                  <Hash size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
                   <input 
                     type="text" 
                     value={quittance.reference}
                     onChange={(e) => handleQuittanceChange(quittance.id, 'reference', e.target.value)}
-                    placeholder="Saisir la référence"
-                    className={`w-full p-4 pl-12 bg-slate-50 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-bold text-slate-700 ${
-                      !quittance.reference ? 'border-rose-100 placeholder:text-rose-200' : 'border-slate-100'
-                    }`}
+                    placeholder="Réf. quittance"
+                    className="w-full p-2.5 pl-9 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-[12px] text-slate-700 shadow-sm"
                   />
                 </div>
-                {!quittance.reference && (
-                  <p className="text-[10px] font-bold text-rose-500 ml-1">La référence est obligatoire</p>
-                )}
               </div>
 
-              {/* Date Field */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block ml-1">
-                  Date <span className="text-rose-500">(*)</span>
-                </label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block ml-1">Date <span className="text-rose-500">*</span></label>
                 <div className="relative">
-                  <Calendar size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                  <Calendar size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
                   <input 
                     type="date" 
                     value={quittance.date}
                     onChange={(e) => handleQuittanceChange(quittance.id, 'date', e.target.value)}
-                    className={`w-full p-4 pl-12 bg-slate-50 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-bold text-slate-700 cursor-pointer ${
-                      !quittance.date ? 'border-rose-100' : 'border-slate-100'
-                    }`}
+                    className="w-full p-2.5 pl-9 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-[12px] text-slate-700 cursor-pointer shadow-sm"
                   />
                 </div>
-                {!quittance.date && (
-                  <p className="text-[10px] font-bold text-rose-500 ml-1">La date est obligatoire</p>
-                )}
               </div>
 
-              {/* Amount Field */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block ml-1">
-                  Montant <span className="text-rose-500">(*)</span>
-                </label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block ml-1">Montant <span className="text-rose-500">*</span></label>
                 <div className="relative">
-                  <Banknote size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                  <Banknote size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
                   <input 
                     type="text" 
                     value={quittance.amount}
                     onChange={(e) => handleQuittanceChange(quittance.id, 'amount', e.target.value)}
-                    placeholder="Ex: 50 000"
-                    className={`w-full p-4 pl-12 bg-slate-50 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-bold text-slate-700 ${
-                      !quittance.amount ? 'border-rose-100 placeholder:text-rose-200' : 'border-slate-100'
-                    }`}
+                    placeholder="Montant FCFA"
+                    className="w-full p-2.5 pl-9 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-[12px] text-slate-700 shadow-sm"
                   />
-                  <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">FCFA</span>
                 </div>
-                {!quittance.amount && (
-                  <p className="text-[10px] font-bold text-rose-500 ml-1">Le montant est obligatoire</p>
-                )}
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Summary Box */}
-      <div className="mt-12 p-8 bg-emerald-50/50 border-2 border-emerald-100 rounded-[3rem] flex flex-col md:flex-row items-center gap-8 shadow-sm">
-        <div className="w-16 h-16 bg-white rounded-2xl shadow-xl shadow-emerald-200/50 flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-50">
-           <Banknote size={32} />
+      <div className="p-6 bg-[#064e3b] text-white rounded-xl flex items-center justify-between shadow-lg shadow-emerald-900/10">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white/10 rounded-lg"><Banknote size={20} /></div>
+          <div>
+            <p className="text-[8px] font-black uppercase tracking-[0.2em] opacity-60">Somme Totale</p>
+            <p className="text-xl font-black italic tracking-tight">{totalAmount.toLocaleString()} FCFA</p>
+          </div>
         </div>
-        <div className="flex-1 text-center md:text-left">
-           <h5 className="font-black text-emerald-800 text-sm uppercase tracking-widest mb-1">Résumé financier</h5>
-           <p className="text-[15px] text-emerald-900/60 font-semibold leading-relaxed">
-             Vérifiez que les montants saisis correspondent exactement aux sommes figurant sur vos reçus originaux. 
-             Toute divergence prolongera les délais de traitement de votre demande.
-           </p>
-        </div>
-        <div className="bg-emerald-700 text-white p-6 rounded-[2rem] text-center min-w-[220px] shadow-lg shadow-emerald-200/40">
-           <p className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-70">Montant Total Déclaré</p>
-           <p className="text-3xl font-black italic">
-             {formData.quittances.reduce((acc, curr) => acc + (parseFloat(curr.amount.replace(/\s/g, '')) || 0), 0).toLocaleString()} 
-             <span className="text-sm ml-2 font-bold opacity-80">FCFA</span>
-           </p>
-        </div>
+        <div className="hidden sm:block text-[10px] font-medium opacity-50 uppercase tracking-widest italic">Calcul automatique SyCAD</div>
       </div>
     </div>
   );
