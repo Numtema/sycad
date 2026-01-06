@@ -37,8 +37,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     `}>
       <div className="p-8 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-950/20 group-hover:scale-105 transition-transform duration-500">
-             <span className="text-emerald-900 font-black text-2xl tracking-tighter">S</span>
+          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-950/20 group-hover:scale-105 transition-transform duration-500 overflow-hidden p-1.5">
+             <img 
+               src="https://dev.sif.bf/assets/img/logo/Plan%20de%20travail%204-100.jpg" 
+               alt="Logo SIF" 
+               className="w-full h-full object-contain rounded-lg"
+             />
           </div>
           <div className="flex flex-col">
             <span className="text-2xl font-black tracking-tighter leading-none italic">SyC@D <span className="text-emerald-400">©</span></span>
