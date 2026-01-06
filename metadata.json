@@ -1,0 +1,5 @@
+{
+  "name": "SyCAD - Système de Délivrance d'Attestations",
+  "description": "Une interface moderne et guidée pour la gestion des demandes d'attestation de parcelles, mettant l'accent sur la validation métier automatique et l'expérience utilisateur.",
+  "requestFramePermissions": []
+}
